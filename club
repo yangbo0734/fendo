@@ -1,0 +1,625 @@
+/*俱乐部*/
+SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for `club_baseclub`
+-- ----------------------------
+CREATE TABLE `club_baseclub` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '俱乐部ID',
+  `name` varchar(2000) DEFAULT NULL COMMENT '俱乐部名称',
+  `limit_num` int(11) DEFAULT '5000' COMMENT '最大人数限制',
+  `need_check` int(11) DEFAULT '1' COMMENT '加入俱乐部是否需要审核（0不需要，1需要）',
+  `room_ticket` int(11) DEFAULT NULL COMMENT '俱乐部当前剩余房卡数',
+  `create_phone_num` varchar(255) DEFAULT NULL COMMENT '创建代理商手机号',
+  `desc` varchar(5000) DEFAULT NULL COMMENT '俱乐部描述信息',
+  `avatar` int(11) DEFAULT '1' COMMENT '俱乐部头像ID',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `default_top_room_num` int(11) DEFAULT '0' COMMENT '置顶空房间个数 0个 1个',
+  `default_top_room_wanfa` varchar(1000) DEFAULT NULL COMMENT '置顶房间的默认玩法',
+  `default_top_room_card` int(11) DEFAULT NULL COMMENT '默认置顶房间开房消耗的房卡数',
+  `only_member_limit_add` int(11) DEFAULT '1' COMMENT '是否只能本俱乐部玩家加入本俱乐部房间',
+  `auto_add_card` int(11) DEFAULT '10' COMMENT '自动加房卡功能  0未开启， >0 低于该值时自动充卡',
+  `auto_add_num` int(11) DEFAULT '50' COMMENT '自动充卡张数',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=100063 DEFAULT CHARSET=utf8;
+
+
+
+
+SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for `club_offline_msg`
+-- ----------------------------
+CREATE TABLE `club_offline_msg` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) DEFAULT NULL COMMENT '玩家id',
+  `club_id` int(11) DEFAULT NULL COMMENT '俱乐部id',
+  `msg` varchar(5000) DEFAULT '离线' COMMENT '2000',
+  `msg_type` int(11) DEFAULT NULL COMMENT '离线消息类型，1添加玩家到俱乐部成功通知消息',
+  `if_send` int(11) DEFAULT NULL COMMENT '0未发送，1已经发送',
+  `create_time` datetime DEFAULT NULL COMMENT '离线消息创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for `venue_list`
+-- ----------------------------
+CREATE TABLE `venue_list` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '比赛场ID',
+  `server_num` int(11) DEFAULT NULL COMMENT '服务器id',
+  `venue_type` int(11) DEFAULT NULL COMMENT '比赛场类型\r\n 1常规赛 2 淘汰赛 3定时赛',
+  `name` varchar(1000) DEFAULT NULL COMMENT '比赛名称',
+  `dissroom_time_flg` int(11) DEFAULT NULL COMMENT '多久不操作自动解散房间 (仅VIP场可用字段)',
+  `room_free_flag` int(11) DEFAULT NULL COMMENT '加入房间是否免房卡',
+  `desc` varchar(1000) DEFAULT NULL COMMENT '简介',
+  `rule_desc` varchar(5000) DEFAULT NULL COMMENT '比赛规则描述',
+  `consumed_ticket` int(11) DEFAULT NULL COMMENT '报名消耗房卡数',
+  `player_limit` int(11) DEFAULT NULL COMMENT '人数限制',
+  `sign_up_start_time` datetime DEFAULT NULL COMMENT '报名开始时间',
+  `sign_up_end_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '报名结束时间',
+  `reward_desc` varchar(5000) DEFAULT NULL COMMENT '奖励描述',
+  `img_url` varchar(1000) DEFAULT NULL COMMENT '比赛场 ico URL',
+  `reward_type` int(11) DEFAULT NULL COMMENT '大赢家奖品类型 1房卡 2红包 3话费 4实物',
+  `reward_num` double DEFAULT NULL COMMENT '大赢家奖励数量值',
+  `room_rule` varchar(1000) DEFAULT NULL COMMENT '玩法规则json',
+  `room_begin` int(11) DEFAULT NULL COMMENT '场馆 房间范围段开始',
+  `room_end` int(11) DEFAULT NULL COMMENT '场馆 房间范围段结束',
+  `rounds` int(11) DEFAULT NULL COMMENT '比赛轮数',
+  `innings` int(11) DEFAULT NULL COMMENT '每轮局数',
+  `status` int(11) DEFAULT NULL COMMENT '是否启用 1启用 0不启用',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `sort_code` int(11) DEFAULT '0' COMMENT '排序字段',
+  `day_play_times_limit` int(11) DEFAULT '0' COMMENT '每日最多玩多少局限制，0不限制，n最多玩n局',
+  `reward_pic_url` varchar(1000) DEFAULT NULL COMMENT '比赛场奖品URL',
+  `req_robot_secondes` int(11) DEFAULT '15' COMMENT '多少秒没匹配到玩家，自动匹配机器人',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of venue_list
+-- ----------------------------
+INSERT INTO `venue_list` VALUES ('1', '1', '0', 'VIp1', '100', '0', null, null, null, null, null, '2018-06-21 09:34:07', null, null, null, null, null, '10000', '49999', null, null, '1', '2018-06-07 10:43:56', '2018-06-21 09:34:07', '1', null, null, '15');
+INSERT INTO `venue_list` VALUES ('2', '1', '1', '免费赢房卡', null, '0', '2人PK 胜者奖励1张房卡奖励', '游戏玩法： 单调夹 三七夹 漏胡 支对 杠加分 \n                  开牌炸 红中加倍\n比赛局数：4局定胜负   报名费用：免费参加\n比赛条件： 满2人既开赛', '0', '2', '2018-01-27 17:09:59', '2018-01-29 11:47:20', '大赢家奖励房卡1张\n如果多人大赢家，则平分奖励', 'http://down.sh668.com.cn/up_pic/zhaodong_test/2018-06-07/pic_1528341433165086.png', '1', '1', '{\"player_limit\":2,\"bu_jia_bu_hu\":1,\"san_qi_dan_diao_jia\":1,\"hong_zhong_man_tian_fei\":1,\"gua_da_feng\":1,\"lou_hu\":1,\"TING_type\":0}', '1000', '1999', '1', '1', '1', '2018-01-24 16:10:48', '2018-06-19 10:28:35', '2', '1', 'http://down.sh668.com.cn/up_pic/zhaodong_test/2018-05-29/pic_1527593772405110.png', '15');
+INSERT INTO `venue_list` VALUES ('3', '1', '1', '赢房卡', null, null, '大赢家赢得2张房卡', '游戏玩法： 肇东玩法  单调夹 三七夹 漏胡 \n比赛局数：4局定胜负   报名费用：1张房卡/人\n比赛条件： 满2人既开赛', '1', '2', '2018-05-25 00:00:00', '2018-06-21 09:34:11', '大赢家赢得2张房卡，多个大赢家则均分奖励', 'http://down.sh668.com.cn/up_pic/zhaodong_test/2018-06-07/pic_1528341554996447.jpg', '1', '2', '{\"player_limit\":2,\"bu_jia_bu_hu\":1,\"san_qi_dan_diao_jia\":1,\"hong_zhong_man_tian_fei\":1,\"gua_da_feng\":1,\"lou_hu\":1,\"TING_type\":0}', '2000', '2999', '1', '4', '1', '2018-05-25 10:11:12', '2018-06-21 09:34:11', '3', '0', 'http://down.sh668.com.cn/up_pic/zhaodong_test/2018-06-01/pic_1527853134950995.png', '15');
+INSERT INTO `venue_list` VALUES ('4', '1', '1', '赢话费', null, null, '4局快速战斗，胜者立得2元话费', '比赛规则：肇东玩法 单调夹  漏胡 三七夹\n                支对  杠加分 开牌炸  红中加倍\n比赛局数：4局         报名费用：1房卡/人\n比赛条件：匹配2人立即开赛', '1', '2', '2018-05-25 00:00:00', '2018-06-21 09:34:12', '4局快速战斗，胜者立得2元话费', 'http://down.sh668.com.cn/up_pic/zhaodong_test/2018-05-25/pic_1527214581254017.png', '3', '2', '{\"player_limit\":2,\"bu_jia_bu_hu\":1,\"san_qi_dan_diao_jia\":1,\"hong_zhong_man_tian_fei\":1,\"gua_da_feng\":1,\"lou_hu\":1,\"TING_type\":0}', '3000', '3999', '1', '4', '1', '2018-05-25 10:16:26', '2018-06-21 09:34:12', '4', '0', 'http://down.sh668.com.cn/up_pic/zhaodong_test/2018-06-07/pic_1528342208907668.png', '15');
+INSERT INTO `venue_list` VALUES ('5', '1', '1', '房卡争夺赛', null, null, '4人4局，大赢家立得3张房卡', '游戏玩法： 单调夹 三七夹 漏胡 支对 杠加分 \n                  开牌炸 红中加倍\n比赛局数：4局定胜负   报名费用：1房卡/人\n比赛条件： 满4人既开赛', '1', '4', '2018-05-25 00:00:00', '2018-06-21 09:34:13', '4人4局，大赢家立得3张房卡，若出现多个大赢家，则均分奖励', 'http://down.sh668.com.cn/up_pic/zhaodong_test/2018-06-07/pic_1528341754989331.jpg', '1', '3', '{\"player_limit\":4,\"bu_jia_bu_hu\":1,\"san_qi_dan_diao_jia\":1,\"hong_zhong_man_tian_fei\":1,\"gua_da_feng\":1,\"lou_hu\":1,\"TING_type\":0}', '4000', '4999', '1', '4', '1', '2018-05-25 10:18:42', '2018-06-21 09:34:13', '4', '0', 'http://down.sh668.com.cn/up_pic/zhaodong_test/2018-06-01/pic_1527853154858669.png', '15');
+INSERT INTO `venue_list` VALUES ('6', '1', '1', '话费争夺赛', null, null, '4局快速战斗，胜者立得3元话费', '比赛规则：肇东玩法 单调夹  漏胡 三七夹\n                支对  杠加分 开牌炸  红中加倍\n比赛局数：4局         报名费用：1房卡/人\n比赛条件：匹配4人立即开赛', '1', '4', '2018-05-25 00:00:00', '2018-06-21 09:34:15', '4局快速战斗，胜者立得3元话费', 'http://down.sh668.com.cn/up_pic/zhaodong_test/2018-06-07/pic_1528341857601219.png', '3', '3', '{\"player_limit\":4,\"bu_jia_bu_hu\":1,\"san_qi_dan_diao_jia\":1,\"hong_zhong_man_tian_fei\":1,\"gua_da_feng\":1,\"lou_hu\":1,\"TING_type\":0}', '5000', '5999', '1', '4', '1', '2018-05-25 10:22:31', '2018-06-21 09:34:15', '6', '0', 'http://down.sh668.com.cn/up_pic/zhaodong_test/2018-06-07/pic_152834222397684.png', '15');
+SET FOREIGN_KEY_CHECKS=1;
+
+
+
+SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for `cpt_reward_rec`
+-- ----------------------------
+CREATE TABLE `cpt_reward_rec` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '唯一记录ID',
+  `venue_id` int(11) DEFAULT NULL COMMENT '场馆ID',
+  `server_num` int(11) DEFAULT NULL COMMENT '服务器ID',
+  `room_id` int(11) DEFAULT NULL COMMENT '房间ID',
+  `uid` int(11) DEFAULT NULL COMMENT '领奖玩家ID',
+  `reward_type` int(11) DEFAULT NULL COMMENT '领奖类型 1房卡，2红包，3话费，4实物',
+  `reward_num` int(11) DEFAULT NULL COMMENT '领奖数量值',
+  `winner_num` int(11) DEFAULT NULL COMMENT '大赢家数量',
+  `if_get` int(11) DEFAULT NULL COMMENT '是否已经领取完成。0未完成 1完成',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `dzp_reward_type` int(11) DEFAULT NULL,
+  `dzp_reward_num` int(11) DEFAULT NULL,
+  `dzp_reward_url` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=255 DEFAULT CHARSET=utf8;
+
+
+SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for `share_config`
+-- ----------------------------
+CREATE TABLE `share_config` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '分享功能id',
+  `pic_url1` varchar(1000) DEFAULT NULL COMMENT '分享入口图片1',
+  `pic_url2` varchar(1000) DEFAULT NULL COMMENT '分享图片2',
+  `update_time` datetime DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `status` int(11) DEFAULT NULL COMMENT '记录状态，是否可用',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of share_config
+-- ----------------------------
+INSERT INTO `share_config` VALUES ('2', 'http://down.sh668.com.cn/up_pic/zhaodong_test/2018-03-26/pic_152206564114131.png', 'http://down.sh668.com.cn/up_pic/zhaodong_test/2018-03-26/pic_1522065645924671.png', '2018-03-26 20:00:47', '2018-03-26 17:50:02', '1');
+
+
+
+SET FOREIGN_KEY_CHECKS=0;
+CREATE TABLE `cpt_dzp_config` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '大转盘奖品配置项id',
+  `reward_type` int(11) DEFAULT NULL COMMENT '奖品类型：0谢谢参与，1房卡，2红包，3话费，4实物',
+  `reward_num` int(11) DEFAULT NULL COMMENT '奖励数量',
+  `reward_name` varchar(500) DEFAULT NULL COMMENT '奖励名称',
+  `reward_rate` int(11) DEFAULT '0' COMMENT '中奖概率，0~99',
+  `reward_url` varchar(1000) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+
+
+
+-- ----------------------------
+-- Table structure for `cpt_end_rec`
+-- ----------------------------
+CREATE TABLE `cpt_end_rec` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '比赛场游戏结束记录id',
+  `roomid` int(11) DEFAULT NULL COMMENT '房间id',
+  `venueid` int(11) DEFAULT NULL COMMENT '比赛场场馆id',
+  `uid1` int(11) DEFAULT NULL COMMENT '玩家1id',
+  `nike_name1` varchar(100) DEFAULT NULL COMMENT '玩家1昵称',
+  `score1` int(11) DEFAULT NULL COMMENT '玩家1输赢得分',
+  `uid2` int(11) DEFAULT NULL,
+  `nike_name2` varchar(100) DEFAULT NULL,
+  `score2` int(11) DEFAULT NULL,
+  `uid3` int(11) DEFAULT NULL,
+  `nike_name3` varchar(100) DEFAULT NULL,
+  `score3` int(11) DEFAULT NULL,
+  `uid4` int(11) DEFAULT NULL,
+  `nike_name4` varchar(100) DEFAULT NULL,
+  `score4` int(11) DEFAULT NULL,
+  `begin_time` datetime DEFAULT NULL COMMENT '游戏开始时间',
+  `end_time` datetime DEFAULT NULL COMMENT '游戏结束时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+
+
+-- ----------------------------
+-- Table structure for `dzp_config`
+-- ----------------------------
+CREATE TABLE `dzp_config` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '大转盘奖品配置项id',
+  `reward_type` int(11) DEFAULT NULL COMMENT '奖品类型：0谢谢参与，1房卡，2红包，3话费，4实物, 5 流量',
+  `reward_num` int(11) DEFAULT NULL COMMENT '奖励数量',
+  `reward_name` varchar(500) DEFAULT NULL COMMENT '奖励名称',
+  `reward_rate` int(11) DEFAULT '0' COMMENT '中奖概率，0~99',
+  `reward_url` varchar(1000) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+
+-- ----------------------------
+-- Table structure for `dzp_reward_info`
+-- ----------------------------
+CREATE TABLE `dzp_reward_info` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '大转盘获奖信息列表id',
+  `dzp_reward_id` int(11) DEFAULT NULL COMMENT '大转盘摇奖栏目id',
+  `player_id` int(11) DEFAULT NULL COMMENT '摇奖玩家id',
+  `if_get` int(11) DEFAULT NULL COMMENT '摇得的奖励是否领取',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `order_id` varchar(50) DEFAULT NULL COMMENT '第三方订单号(充值话费或者流量第三方订单号)',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=673 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `club_pmd` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '跑马灯消息id',
+  `club_id` int(11) DEFAULT NULL COMMENT '跑马灯消息发布俱乐部',
+  `content` varchar(5000) DEFAULT NULL COMMENT '跑马灯消息内容',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for `share_get_reward_rec`
+-- ----------------------------
+CREATE TABLE `share_get_reward_rec` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) DEFAULT NULL,
+  `share_reward_name` varchar(255) DEFAULT NULL COMMENT '奖励名称',
+  `share_reward_type` int(11) DEFAULT NULL COMMENT '奖励类型',
+  `share_reward_num` int(11) DEFAULT NULL COMMENT '奖励数量',
+  `create_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for `share_rec`
+-- ----------------------------
+CREATE TABLE `share_rec` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `uid` int(11) DEFAULT NULL COMMENT '分享玩家id',
+  `create_time` datetime DEFAULT NULL COMMENT '分享时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+
+
+-- ----------------------------
+-- Table structure for `activity_new`
+-- ----------------------------
+CREATE TABLE `activity_new` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `activity_name` varchar(200) DEFAULT NULL COMMENT '左侧活动名称栏（选择活动）',
+  `text_title` varchar(200) DEFAULT NULL COMMENT '文本活动标题',
+  `text_content` varchar(500) DEFAULT NULL COMMENT '文本活动内容',
+  `pic_url` varchar(300) DEFAULT NULL COMMENT '图片活动URL',
+  `create_time` datetime DEFAULT NULL COMMENT '活动创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '活动修改时间',
+  `sort_code` int(11) DEFAULT '0' COMMENT '排序号',
+  `status` int(11) DEFAULT NULL COMMENT '是否可用 0不可用，1可用',
+  `popup_flag` int(11) DEFAULT NULL COMMENT '活动是否弹窗 0不弹，1弹',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+
+
+-- ----------------------------
+-- Table structure for `player_mail_msg`
+-- ----------------------------
+CREATE TABLE `player_mail_msg` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `uid` int(11) DEFAULT NULL COMMENT '玩家id',
+  `mail_content` varchar(5000) DEFAULT NULL COMMENT '邮件内容',
+  `mail_title` varchar(500) DEFAULT NULL COMMENT '邮件标题',
+  `reward_num` int(11) DEFAULT '0' COMMENT '奖励房卡数量',
+  `read_flag` int(11) DEFAULT '0' COMMENT '0未读，1已读',
+  `create_time` datetime DEFAULT NULL COMMENT '游戏创建时间',
+  `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `sysid` int(11) DEFAULT NULL COMMENT '系统消息id',
+  `reward_type` int(11) DEFAULT '0' COMMENT '奖励类型 0-房卡',
+  `popup_flag` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=23730 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for `system_msg`
+-- ----------------------------
+CREATE TABLE `system_msg` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自己增id',
+  `content` varchar(5000) DEFAULT NULL COMMENT '消息内容',
+  `title` varchar(500) DEFAULT NULL COMMENT '消息标题',
+  `reward_num` int(11) DEFAULT NULL COMMENT '系统消息给予全服玩家的房卡补偿数量',
+  `reward_type` int(11) DEFAULT NULL COMMENT '奖励类型 0-房卡(目前默认)',
+  `status` int(11) DEFAULT NULL COMMENT '状态0-未发放 1-已发放',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `popup_flag` int(11) DEFAULT '0' COMMENT '0 非弹窗, 1 弹窗',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for `sliding_image`
+-- ----------------------------
+CREATE TABLE `sliding_image` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自动递增id',
+  `image_url` varchar(2000) DEFAULT NULL COMMENT '滑动图片url地址',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `status` int(11) DEFAULT NULL COMMENT '是否启用，0不可用，1可用',
+  `sort_code` int(11) NOT NULL COMMENT '排序字段',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+SET FOREIGN_KEY_CHECKS=1;
+
+-- ----------------------------
+-- Table structure for `club_member`
+-- ----------------------------
+CREATE TABLE `club_member` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自动增id',
+  `uid` int(11) NOT NULL DEFAULT '0' COMMENT '玩家id',
+  `club_id` int(11) NOT NULL DEFAULT '0' COMMENT '俱乐部ID',
+  `flag` int(11) DEFAULT '0' COMMENT '加入标志：0等待审核，1审核被拒绝，2审核通过加入俱乐部成功',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=140 DEFAULT CHARSET=utf8;
+
+/*
+2018-06-14 更新 世界杯
+*/
+CREATE TABLE `guessing_activity` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `title` varchar(255) DEFAULT NULL COMMENT '竞猜标题',
+  `sub_title` varchar(255) DEFAULT NULL COMMENT '副标题',
+  `content` varchar(2000) DEFAULT NULL COMMENT '竞猜内容',
+  `option1` varchar(50) DEFAULT NULL COMMENT '选项1',
+  `option_url1` varchar(500) DEFAULT NULL COMMENT '选项图片',
+  `option2` varchar(50) DEFAULT NULL COMMENT '选项2',
+  `option_url2` varchar(500) DEFAULT NULL COMMENT '选项图片2',
+  `right_key` varchar(50) DEFAULT NULL COMMENT '正确答案',
+  `reward_type` int(11) DEFAULT NULL COMMENT '奖励类型 0-房卡(目前默认)',
+  `reward_num` int(11) DEFAULT NULL COMMENT '系统消息给予全服玩家的房卡补偿数量',
+  `start_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '开始时间',
+  `end_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '结束时间',
+  `status` int(11) DEFAULT NULL COMMENT '是否启用，0不启用，1启用',
+  `reward_flag` int(11) DEFAULT NULL COMMENT '是否发放奖励0-未发放 1-已发放',
+  `msg_title` varchar(255) DEFAULT NULL COMMENT '消息标题',
+  `msg_content2` varchar(1000) DEFAULT NULL COMMENT '未中奖',
+  `msg_content` varchar(1000) DEFAULT NULL COMMENT '消息内容',
+  `create_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of guessing_activity
+-- ----------------------------
+INSERT INTO `guessing_activity` VALUES ('15', '揭幕战', '6|14|23:00', '揭幕战', '英格兰', 'http://down.sh668.com.cn/up_pic/heihe_test/2018-06-13/pic_1528889509866967.png', '乌拉圭', 'http://down.sh668.com.cn/up_pic/heihe_test/2018-06-13/pic_1528889511583073.png', null, '0', '1', '2018-06-13 19:32:27', '2018-06-14 19:32:27', '1', '0', null, null, null, '2018-06-13 19:32:36', '2018-06-13 19:32:37');
+
+-- ----------------------------
+-- Table structure for `guessing_rec`
+-- ----------------------------
+CREATE TABLE `guessing_rec` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) DEFAULT NULL,
+  `gid` int(11) DEFAULT NULL,
+  `answer` varchar(50) DEFAULT NULL COMMENT '答案',
+  `create_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+/*
+2018-06-6整理
+/*
+修改字段
+*/
+alter table `venue_list`
+add `sort_code` int(11) DEFAULT '0' COMMENT '排序字段';
+
+alter table `venue_list`
+add `reward_pic_url` varchar(1000) DEFAULT NULL COMMENT '比赛场奖品URL';
+
+alter table `cpt_reward_rec`
+add `dzp_reward_type` int(11) DEFAULT NULL,
+add `dzp_reward_num` int(11) DEFAULT NULL,
+add `dzp_reward_url` varchar(200) DEFAULT NULL;
+
+alter table `club_baseclub`
+add `auto_add_card` int(11) DEFAULT '10' COMMENT '自动加房卡功能  0未开启， >0 低于该值时自动充卡',
+add `auto_add_num` int(11) DEFAULT '50' COMMENT '自动充卡张数';
+
+
+alter table `ctl_dellog`
+add  `ctl_if_test_hotup` int(11) DEFAULT '0' COMMENT '测试热跟';
+
+alter table `player`
+add  `dzp_update_time` int(11) DEFAULT '0' COMMENT '大转盘摇奖时间戳';
+
+alter table `player`
+add  `last_end_board_time` int(11) DEFAULT '0' COMMENT '上一局牌局结束时间';
+
+alter table `venue_list`
+add `day_play_times_limit` int(11) DEFAULT '0' COMMENT '每日最多玩多少局限制，0不限制，n最多玩n局';
+
+alter table `ctl_dellog`
+add  `ctl_dzp_reward_board_limit` int(11) DEFAULT '1' COMMENT '大转盘摇奖机会，需要累计游戏局数';
+
+alter table playback add `banker_uid` int(11) DEFAULT NULL COMMENT '庄家id',
+add  `rec_pd_data` mediumblob;
+
+/*
+2018-06-12 更新
+*/
+alter table `end_rec`
+add `host_seat_no` int(11) DEFAULT '-1' COMMENT '房主座位id';
+
+/*
+2018-06-15
+比赛场，及大厅大转盘领奖记录表添加字段
+*/
+
+alter table `dzp_reward_info`
+add `msg` varchar(200) DEFAULT NULL COMMENT '第三方支付结果信息';
+
+alter table `cpt_reward_rec`
+add  `order_id` varchar(200) DEFAULT NULL COMMENT '外部订单号',
+add  `msg` varchar(200) DEFAULT NULL COMMENT '第三方支付结果信息';
+
+
+/*
+2018-6-20
+周排行记录表
+*/
+CREATE TABLE `cpt_week_rank_rec` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) DEFAULT NULL,
+  `rank` int(11) DEFAULT NULL,
+  `score` double DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `h5wxpay` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) DEFAULT NULL COMMENT '支付玩家uid',
+  `order_id` varchar(200) NOT NULL DEFAULT '' COMMENT '订单id',
+  `order_status` int(11) DEFAULT NULL COMMENT '订单状态 0待支付 -1支付失败 1支付成功',
+  `goods_id` int(11) DEFAULT NULL COMMENT '商品id',
+  `goods_name` varchar(100) DEFAULT NULL COMMENT '商品名称',
+  `goods_num` int(11) DEFAULT NULL COMMENT '商品数量',
+  `goods_type` int(11) DEFAULT NULL COMMENT '商品类型 默认房卡',
+  `prepay_id` varchar(200) DEFAULT NULL COMMENT '预支付交易会话标识（下单成功后的返回的预支付id）',
+  `transaction_id` varchar(200) DEFAULT NULL COMMENT '微信支付订单号（订单完成）',
+  `price` float DEFAULT NULL COMMENT '商品价格,单位元 ( 浮点型，例如：1.23 )',
+  `create_time` datetime DEFAULT NULL COMMENT '订单创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '订单更新时间',
+  `desc` varchar(200) DEFAULT NULL COMMENT '描述',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8;
+
+/*
+2018-6-20
+机器人添加
+*/
+alter table `venue_list`
+add `req_robot_secondes` int(11) DEFAULT '15' COMMENT '多少秒没匹配到玩家，自动匹配机器人';
+
+alter table `player`
+add `is_robot` int(11) DEFAULT '0' COMMENT '是否是机器人 0不是，1是';
+
+
+/*
+ 2018-6-26
+ 实物每日最多限制次数
+*/
+alter table `dzp_config`
+add `shiwu_limit_times` int(11) DEFAULT '0' COMMENT '如果中奖是实物，每单位时间累计允许抽中的最大次数。0不限制 >n 限制只能抽中n次',
+add `shiwu_limit_unit` int(11) DEFAULT '1' COMMENT '抽奖限制的时间单位';
+
+
+/*
+ 大转盘领奖次数 
+ */
+alter table `dzp_reward_info`
+add `dzp_reward_type` int(11) DEFAULT NULL COMMENT '大厅大转盘中奖类型',
+add `dzp_reward_name` varchar(200) DEFAULT NULL COMMENT '大厅大转盘中奖名称';
+alter table `dzp_reward_info`
+add `dzp_reward_num` int(11) DEFAULT NULL COMMENT '大厅大转盘中奖数量';
+
+alter table `dzp_config`
+add `new_user_reward_flag` int(11) DEFAULT '0' COMMENT '是否是新玩家指定抽中的奖品: 0不是，1是';
+
+/*
+ 添加相关表是否清理标志字段
+ */
+alter table `dzp_reward_info`
+add `if_clear` int(11) DEFAULT '0' COMMENT '是否清理 0未清理，1已清理';
+alter table `cpt_reward_rec`
+add `if_clear` int(11) DEFAULT '0' COMMENT '是否清理 0未清理，1已清理';
+alter table `player_mail_msg`
+add `if_clear` int(11) DEFAULT '0' COMMENT '是否清理 0未清理，1已清理';
+
+
+alter table `venue_list`
+add `req_robot_secondes` int(11) DEFAULT '15' COMMENT '多少秒没匹配到玩家，自动匹配机器人';
+
+alter table `player`
+add `is_robot` int(11) DEFAULT '0' COMMENT '是否是机器人 0不是，1是';
+
+
+/*
+ 大厅大转盘摇奖次数，用个变量存储
+VisitLogin 第二个版本改动了这个字段，还没更新，这个版本虽然还没上这个功能，保证PHP兼容需先更新字段。
+ */
+alter table `player`
+add `dzp_times` int(11) DEFAULT NULL COMMENT '大厅大转盘剩余摇奖计数器';
+
+
+alter table `dzp_config`
+add `new_user_reward_flag` int(11) DEFAULT '0' COMMENT '是否是新玩家指定抽中的奖品: 0不是，1是';
+
+
+alter table `player`
+add  `add_day_total_board` int(11) DEFAULT '0' COMMENT '每日游戏局数累加，每打完一局 redis里面 +1',
+add  `add_slot_total_board` int(11) DEFAULT '0' COMMENT '时间段内游戏局数累加，每打完一局， redis里面 +1',
+add  `add_day_total_sec` int(11) DEFAULT '0' COMMENT ' 每日游戏时长累加，每打完一局 +n (n为本局在线秒数-掉线时间不计算在内)',
+add  `add_slot_total_sec` int(11) DEFAULT '0' COMMENT '时间段内游戏时间累加，每打完一局 +n(n为本局在线秒数-掉线时间不计算在内)',
+add  `play_at` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后在玩时间';
+
+/*
+牌型任务奖励大转盘摇奖次数
+*/
+
+/*
+ 大厅大转盘摇奖次数，用个变量存储
+ */
+alter table `player`
+add `dzp_times` int(11) DEFAULT NULL COMMENT '大厅大转盘剩余摇奖计数器';
+
+
+CREATE TABLE `rule_reward_base` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `rule_str` varchar(200) DEFAULT NULL,
+  `rule_name` varchar(200) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for rule_reward_config
+-- ----------------------------
+CREATE TABLE `rule_reward_config` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '牌型任务配置 自增id',
+  `name` varchar(200) DEFAULT NULL COMMENT '牌型任务名称',
+  `targe_value` int(11) DEFAULT NULL COMMENT '牌型任务达成目标需要完成次数',
+  `rule_str` varchar(200) DEFAULT '' COMMENT '牌型拼音',
+  `rule_name` varchar(200) DEFAULT NULL COMMENT '牌型中文',
+  `rule_num` int(11) DEFAULT '1' COMMENT '牌型任务单次达成，需求次数设置(如:一局牌局中出现两次杠)，如无特殊设置默认是1',
+  `mj` int(11) DEFAULT '0' COMMENT '胡牌麻将/杠牌麻将(任务目标麻将值)',
+  `reward_type` int(11) DEFAULT NULL COMMENT '奖励类型，1大转盘摇奖',
+  `reward_num` int(11) DEFAULT '1' COMMENT '摇奖次数',
+  `reward_name` varchar(200) DEFAULT NULL COMMENT '奖励名称',
+  `task_begin_time` datetime DEFAULT NULL COMMENT '牌型任务生效开始时间',
+  `task_end_time` datetime DEFAULT NULL COMMENT '牌型任务生效结束时间',
+  `status` int(11) DEFAULT '1' COMMENT '是否启用，0不启用，1启用',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `task_cycle_count` int(11) DEFAULT '1' COMMENT '任务可以循环次数，默认1次，设置无限次，可设置一个很大的值',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for rule_reward_rec
+-- ----------------------------
+CREATE TABLE `rule_reward_rec` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '牌型奖励记录自增id',
+  `uid` int(11) DEFAULT NULL COMMENT '玩家uid',
+  `rule_reward_config_id` int(11) DEFAULT NULL COMMENT '完成规则任务+1， (记录规则任务id)',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `cur_cycle_times` int(11) DEFAULT NULL COMMENT '当前任务完成次数',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8;
+
+alter table `ctl_dellog`
+add `ctl_pay_rmb_limit` int(11) DEFAULT '0' COMMENT '每日最多充值限制';
+
+
+alter table `cliuperrlog`
+add `device` varchar(200) DEFAULT NULL COMMENT '报错平台',
+add `version` varchar(200) DEFAULT NULL COMMENT '报错客户端版本';
+
+
+/*
+防沉迷配置表 
+*/
+DROP TABLE IF EXISTS `ctl_anti_addiction`;
+CREATE TABLE `ctl_anti_addiction` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '记录id，只又1条',
+  `ctl_no_play_time_solt` int(11) DEFAULT '0' COMMENT '每日指定时间段内不允许游戏。0关闭控制功能，1开启控制功能',
+  `time_slot_limit_begin` time DEFAULT NULL COMMENT '每日限制开始时间',
+  `time_slot_limit_end` time DEFAULT NULL COMMENT '每日限制结束时间',
+  `ctl_total_play_time` int(11) DEFAULT '0' COMMENT '单日组局游戏时间, 0 不控制，1 以局数为单位控制，2 以小时为单位控制',
+  `total_hour_limit` int(11) DEFAULT '4' COMMENT '以小时为单位控制时，每日允许玩几小时（工作日）。',
+  `total_board_limit` int(11) DEFAULT '8' COMMENT '以局数为单位控制时，每日允许玩几局（工作日）。',
+  `total_hour_limit_weekend` int(11) DEFAULT '6' COMMENT '以小时为单位控制时，每日允许玩几小时（周末）。',
+  `total_board_limit_weekend` int(11) DEFAULT '9' COMMENT '以局数为单位控制时，每日允许玩几局（周末）。',
+  `ctl_add_up_to_rest` int(11) DEFAULT '0' COMMENT '玩家累计游戏多长时间，提醒休息控制开关，0关闭功能，1以局数为单位控制，2以时间为单位控制。',
+  `continue_hour_limit` int(11) DEFAULT '2' COMMENT '连续玩了n小时强制休息,默认 n=2',
+  `continue_board_limit` int(11) DEFAULT '3' COMMENT '连续玩了n局，强制休息15分钟限制。默认n=3',
+  `rest_time` int(11) DEFAULT '15' COMMENT '强制休息时间（分钟）',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of ctl_anti_addiction
+-- ----------------------------
+INSERT INTO `ctl_anti_addiction` VALUES ('1', '0', '01:00:00', '04:00:00', '0', '4', '6', '6', '9', '0', '2', '3', '15');
+
+/*
+防沉迷 player表添加字段
+ */
+alter table `player`
+add  `add_day_total_board` int(11) DEFAULT '0' COMMENT '每日游戏局数累加，每打完一局 redis里面 +1',
+add  `add_slot_total_board` int(11) DEFAULT '0' COMMENT '时间段内游戏局数累加，每打完一局， redis里面 +1',
+add  `add_day_total_sec` int(11) DEFAULT '0' COMMENT ' 每日游戏时长累加，每打完一局 +n (n为本局在线秒数-掉线时间不计算在内)',
+add  `add_slot_total_sec` int(11) DEFAULT '0' COMMENT '时间段内游戏时间累加，每打完一局 +n(n为本局在线秒数-掉线时间不计算在内)',
+add  `play_at` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '最后在玩时间';
+
+
+alter table `ticket_consume_rec`
+add  `ret_ticket` int(11) DEFAULT NULL COMMENT '扣除房卡后的当前房卡',
+add  `remarks` varchar(250) DEFAULT NULL COMMENT '消费描述',
+add  `ticket_type` int(11) DEFAULT '0' COMMENT '货币类型 0房卡';
